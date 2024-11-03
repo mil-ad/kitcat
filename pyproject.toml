@@ -7,6 +7,15 @@ requires-python = ">=3.9"
 dependencies = [
     "matplotlib>=3.9",
 ]
+keywords = ["matplotlib", "kitty"]
+authors = [
+  {name = "Milad Alizadeh", email = "git@mil.ad"},
+]
+license = {file = "LICENSE"}
+
+[project.urls]
+Repository = "https://github.com/mil-ad/kitcat.git"
+Issues = "https://github.com/mil-ad/kitcat/issues"
 
 [build-system]
 requires = ["hatchling"]
