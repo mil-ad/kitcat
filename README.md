@@ -5,6 +5,11 @@ This project introduces a new `kitcat` backend for Matplotlib that allows plots 
 - Direct Matplotlib plotting in terminal emulators that support [Kitty graphics protocol](https://sw.kovidgoyal.net/kitty/graphics-protocol/)
 - Works seamlessly over SSH
 
+<p float="left">
+  <img src="./demo1.gif" width="45%" />
+  <img src="./demo2.gif" width="45%" />
+</p>
+
 ## Terminal Emulator Support
 
 Not all terminal emulators support Kitty's graphics protocol. I haven't tested this extensively, so please let me know if you find other emulators that are compatible, and I will update the list accordingly.
