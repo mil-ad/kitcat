@@ -1,0 +1,21 @@
+[project]
+name = "kitcat"
+version = "1.0.0"
+description = "Matplotlib backend for direct plotting in the terminal using Kitty graphics protocol."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "matplotlib>=3.9",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = [
+    "src/kitcat",
+]
+
+[project.entry-points."matplotlib.backend"]
+kitcat = "src.kitcat.backend"
