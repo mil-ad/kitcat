@@ -26,12 +26,12 @@ def display_png(pixel_data):
     # f=100 indicates PNG data
     # m=1 indicates there's going to be more data chunks
     sys.stdout.write(
-        f"\033_Gm={"1" if more_data else "0"},a=T,f=100;{first_chunk}\033\\"
+        f"\033_Gm={'1' if more_data else '0'},a=T,f=100;{first_chunk}\033\\"
     )
 
     while more_data:
         chunk, more_data = more_data[:CHUNK_SIZE], more_data[CHUNK_SIZE:]
-        sys.stdout.write(f"\033_Gm={"1" if more_data else "0"};{chunk}\033\\")
+        sys.stdout.write(f"\033_Gm={'1' if more_data else '0'};{chunk}\033\\")
 
     sys.stdout.write("\n")
     sys.stdout.flush()
