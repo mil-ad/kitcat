@@ -17,12 +17,14 @@ Not all terminal emulators support Kitty's graphics protocol. I haven't tested t
 | Terminal Emulator    | Supported  |
 | -------------------- | ---------- |
 | Kitty                | ✅         |
-| iTerm2               | ✅         |
+| iTerm2               | ⏳         |
 | WezTerm              | ✅         |
 | Alacritty            | ❌         |
 | Warp                 | ❌         |
 | Terminal.app (macOS) | ❌         |
 | wayst                | ✅         |
+| tmux                 | ⏳         |
+
 
 ## Installation
 
