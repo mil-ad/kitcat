@@ -2,8 +2,8 @@
 
 This project introduces a new `kitcat` backend for Matplotlib that allows plots to be displayed directly in the terminal. It utilizes the "agg" backend for rendering plots before sending them to the terminal.
 
-- Direct Matplotlib plotting in terminal emulators that support [Kitty graphics protocol](https://sw.kovidgoyal.net/kitty/graphics-protocol/)
-- Works seamlessly over SSH
+- Direct Matplotlib plotting in terminal emulators that support [Kitty](https://sw.kovidgoyal.net/kitty/graphics-protocol/) or [iTerm2](https://iterm2.com/documentation-images.html) graphics protocols.
+- Works seamlessly over SSH.
 
 <p float="left">
   <img src="./demo1.gif" width="45%" />
@@ -12,19 +12,19 @@ This project introduces a new `kitcat` backend for Matplotlib that allows plots 
 
 ## Terminal Emulator Support
 
-Not all terminal emulators support Kitty's graphics protocol. I haven't tested this extensively, so please let me know if you find other emulators that are compatible, and I will update the list accordingly.
+Not all terminal emulators support Kitty or iTerm2 graphics protocols. I haven't done extensive testing, so please let me know if you find other emulators that are compatible, and I will update the list accordingly.
 
-| Terminal Emulator    | Supported  | |
-| -------------------- | ---------- | - |
-| Kitty                | ✅         | |
-| iTerm2               | ✅         | |
-| VSCode               | ✅         | Needs `terminal.integrated.enableImages` and `terminal.integrated.gpuAcceleration` enabled |
-| WezTerm              | ✅         | |
-| Alacritty            | ❌         | |
-| Warp                 | ❌         | |
-| Terminal.app (macOS) | ❌         | |
-| wayst                | ✅         | |
-| tmux                 | ⏳         | |
+| Terminal Emulator    | Supported | Notes                                                |
+| -------------------- | --------- | ---------------------------------------------------- |
+| Kitty                | ✅         |                                                      |
+| iTerm2               | ✅         |                                                      |
+| VSCode               | ✅         | Needs `terminal.integrated.enableImages` in settings |
+| WezTerm              | ✅         |                                                      |
+| tmux                 | ⏳         |
+| Alacritty            | ❌         |                                                      |
+| Warp                 | ❌         |                                                      |
+| Terminal.app (macOS) | ❌         |                                                      |
+| wayst                | ✅         |                                                      |
 
 
 ## Installation
