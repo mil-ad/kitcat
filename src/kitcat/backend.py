@@ -2,15 +2,19 @@ import sys
 from base64 import b64encode
 from io import BytesIO
 
+import itertools
+
 from matplotlib.backend_bases import FigureManagerBase
 from matplotlib.backends.backend_agg import FigureCanvasAgg
+import os
 
 __all__ = ["FigureCanvas", "FigureManager"]
 
-CHUNK_SIZE = 4096
+CHUNK_SIZE_KITTY = 4096
+CHUNK_SIZE_IT2 = 1_048_576
 
 
-def display_png(pixel_data):
+def display_kitty(pixel_data):
     """
     Encodes pixel data to the terminal using Kitty graphics protocol. All escape codes
     are of the form: <ESC>_G<control data>;<payload><ESC>\
@@ -20,7 +24,7 @@ def display_png(pixel_data):
     """
     data = b64encode(pixel_data).decode("ascii")
 
-    first_chunk, more_data = data[:CHUNK_SIZE], data[CHUNK_SIZE:]
+    first_chunk, more_data = data[:CHUNK_SIZE_KITTY], data[CHUNK_SIZE_KITTY:]
 
     # a=T simultaneously transmits and displays the image
     # f=100 indicates PNG data
@@ -30,9 +34,29 @@ def display_png(pixel_data):
     )
 
     while more_data:
-        chunk, more_data = more_data[:CHUNK_SIZE], more_data[CHUNK_SIZE:]
+        chunk, more_data = more_data[:CHUNK_SIZE_KITTY], more_data[CHUNK_SIZE_KITTY:]
         sys.stdout.write(f"\033_Gm={'1' if more_data else '0'};{chunk}\033\\")
 
+    sys.stdout.write("\n")
+    sys.stdout.flush()
+
+
+def display_iterm2_new(pixel_data):
+    data = b64encode(pixel_data).decode("ascii")
+
+    sys.stdout.write(f"\033]1337;MultipartFile=inline=1;size={len(pixel_data)}\a")
+    for chunk in itertools.batched(data, CHUNK_SIZE_IT2):
+        sys.stdout.write(f"\033]1337;FilePart={"".join(chunk)}\a")
+    sys.stdout.write("\033]1337;FileEnd\a")
+    sys.stdout.write("\n")
+    sys.stdout.flush()
+
+
+def display_iterm2(pixel_data):
+    data = b64encode(pixel_data).decode("ascii")
+
+    # size is optional in iTerm2 but is required in vscode terminal
+    sys.stdout.write(f"\033]1337;File=inline=1;size={len(pixel_data)}:{data}\a")
     sys.stdout.write("\n")
     sys.stdout.flush()
 
@@ -42,7 +66,11 @@ class KitcatFigureManager(FigureManagerBase):
         with BytesIO() as buf:
             self.canvas.print_png(buf)
             buf.seek(0)
-            display_png(pixel_data=buf.read())
+
+            if os.environ.get("TERM_PROGRAM") in ["iTerm.app", "vscode"]:
+                display_iterm2(pixel_data=buf.read())
+            else:
+                display_kitty(pixel_data=buf.read())
 
 
 class KitcatFigureCanvas(FigureCanvasAgg):

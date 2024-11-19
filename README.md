@@ -14,16 +14,17 @@ This project introduces a new `kitcat` backend for Matplotlib that allows plots 
 
 Not all terminal emulators support Kitty's graphics protocol. I haven't tested this extensively, so please let me know if you find other emulators that are compatible, and I will update the list accordingly.
 
-| Terminal Emulator    | Supported  |
-| -------------------- | ---------- |
-| Kitty                | ✅         |
-| iTerm2               | ⏳         |
-| WezTerm              | ✅         |
-| Alacritty            | ❌         |
-| Warp                 | ❌         |
-| Terminal.app (macOS) | ❌         |
-| wayst                | ✅         |
-| tmux                 | ⏳         |
+| Terminal Emulator    | Supported  | |
+| -------------------- | ---------- | - |
+| Kitty                | ✅         | |
+| iTerm2               | ✅         | |
+| VSCode               | ✅         | Needs `terminal.integrated.enableImages` and `terminal.integrated.gpuAcceleration` enabled |
+| WezTerm              | ✅         | |
+| Alacritty            | ❌         | |
+| Warp                 | ❌         | |
+| Terminal.app (macOS) | ❌         | |
+| wayst                | ✅         | |
+| tmux                 | ⏳         | |
 
 
 ## Installation
