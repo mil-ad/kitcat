@@ -16,15 +16,16 @@ Not all terminal emulators support Kitty or iTerm2 graphics protocols. I haven't
 
 | Terminal Emulator    | Supported | Notes                                                |
 | -------------------- | --------- | ---------------------------------------------------- |
-| Kitty                | ✅         |                                                      |
-| iTerm2               | ✅         |                                                      |
-| VSCode               | ✅         | Needs `terminal.integrated.enableImages` in settings |
-| WezTerm              | ✅         |                                                      |
-| tmux                 | ⏳         |
-| Alacritty            | ❌         |                                                      |
-| Warp                 | ❌         |                                                      |
-| Terminal.app (macOS) | ❌         |                                                      |
-| wayst                | ✅         |                                                      |
+| Kitty                | ✅        |                                                      |
+| iTerm2               | ✅        |                                                      |
+| VSCode               | ✅        | Needs `terminal.integrated.enableImages` in settings |
+| WezTerm              | ✅        |                                                      |
+| tmux                 | ⏳        |                                                      |
+| Zellij               | ❌        |                                                      |
+| Alacritty            | ❌        |                                                      |
+| Warp                 | ❌        |                                                      |
+| Terminal.app (macOS) | ❌        |                                                      |
+| wayst                | ✅        |                                                      |
 
 
 ## Installation
