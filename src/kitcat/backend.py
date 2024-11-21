@@ -1,12 +1,11 @@
+import itertools
+import os
 import sys
 from base64 import b64encode
 from io import BytesIO
 
-import itertools
-
 from matplotlib.backend_bases import FigureManagerBase
 from matplotlib.backends.backend_agg import FigureCanvasAgg
-import os
 
 __all__ = ["FigureCanvas", "FigureManager"]
 
@@ -46,7 +45,7 @@ def display_iterm2_new(pixel_data):
 
     sys.stdout.write(f"\033]1337;MultipartFile=inline=1;size={len(pixel_data)}\a")
     for chunk in itertools.batched(data, CHUNK_SIZE_IT2):
-        sys.stdout.write(f"\033]1337;FilePart={"".join(chunk)}\a")
+        sys.stdout.write(f"\033]1337;FilePart={''.join(chunk)}\a")
     sys.stdout.write("\033]1337;FileEnd\a")
     sys.stdout.write("\n")
     sys.stdout.flush()
