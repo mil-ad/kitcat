@@ -3,11 +3,7 @@ name: Publish to PyPI
 on:
   release:
     types: [created]
-  workflow_call:
-    inputs:
-      plan:
-        required: true
-        type: string
+  workflow_dispatch:
 
 jobs:
   pypi-publish:
