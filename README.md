@@ -20,6 +20,7 @@ Not all terminal emulators support Kitty or iTerm2 graphics protocols. I haven't
 | iTerm2               | ✅        |                                                      |
 | VSCode               | ✅        | Requires `terminal.integrated.enableImages` in settings |
 | WezTerm              | ✅        |                                                      |
+| Ghostty              | ✅        |                                                      |
 | tmux                 | ✅        | Requires `allow-passthrough on` in tmux config       |
 | Zellij               | ❌        |                                                      |
 | Alacritty            | ❌        |                                                      |
