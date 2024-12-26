@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: release
+    permissions:
+      # For PyPI's trusted publishing.
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
