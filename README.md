@@ -6,8 +6,8 @@ This project introduces a new `kitcat` backend for Matplotlib that allows plots 
 - Works seamlessly over SSH.
 
 <p float="left">
-  <img src="./demo1.gif" width="45%" />
-  <img src="./demo2.gif" width="45%" />
+  <img src="https://raw.githubusercontent.com/mil-ad/kitcat/main/demo1.gif" width="45%" />
+  <img src="https://raw.githubusercontent.com/mil-ad/kitcat/main/demo2.gif" width="45%" />
 </p>
 
 ## Terminal Emulator Support
