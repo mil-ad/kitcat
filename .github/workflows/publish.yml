@@ -18,5 +18,7 @@ jobs:
           version: "0.5.11"
           enable-cache: true
           cache-dependency-glob: "uv.lock"
+      - name: Build the project
+        run: uv build
       - name: Publish to PyPi
         run: uv publish
