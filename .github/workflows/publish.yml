@@ -1,13 +1,13 @@
 name: Publish to PyPI
 
 on:
-  - release:
-      types: [created]
-  - workflow_call:
-      inputs:
-        plan:
-          required: true
-          type: string
+  release:
+    types: [created]
+  workflow_call:
+    inputs:
+      plan:
+        required: true
+        type: string
 
 jobs:
   pypi-publish:
