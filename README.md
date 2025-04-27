@@ -23,8 +23,8 @@ Not all terminal emulators support Kitty or iTerm2 graphics protocols. I haven't
 | Ghostty              | ✅        |                                                      |
 | tmux                 | ✅        | Requires `allow-passthrough on` in tmux config       |
 | Zellij               | ❌        |                                                      |
+| Warp                 | ✅        |                                                      |
 | Alacritty            | ❌        |                                                      |
-| Warp                 | ❌        |                                                      |
 | Terminal.app (macOS) | ❌        |                                                      |
 | wayst                | ✅        |                                                      |
 
