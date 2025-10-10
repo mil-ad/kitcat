@@ -14,20 +14,20 @@ This project introduces a new `kitcat` backend for Matplotlib that allows plots 
 
 Not all terminal emulators support Kitty or iTerm2 graphics protocols. I haven't done extensive testing, so please let me know if you find other emulators that are compatible, and I will update the list accordingly.
 
-| Terminal Emulator    | Supported | Notes                                                |
-| -------------------- | --------- | ---------------------------------------------------- |
-| Kitty                | ✅        |                                                      |
-| iTerm2               | ✅        |                                                      |
+| Terminal Emulator    | Supported | Notes                                                   |
+| -------------------- | --------- | ------------------------------------------------------- |
+| Kitty                | ✅        |                                                         |
+| iTerm2               | ✅        |                                                         |
 | VSCode               | ✅        | Requires `terminal.integrated.enableImages` in settings |
-| WezTerm              | ✅        |                                                      |
-| Ghostty              | ✅        |                                                      |
-| tmux                 | ✅        | Requires `allow-passthrough on` in tmux config       |
-| Zellij               | ❌        |                                                      |
-| Warp                 | ✅        |                                                      |
-| Alacritty            | ❌        |                                                      |
-| Terminal.app (macOS) | ❌        |                                                      |
-| wayst                | ✅        |                                                      |
-
+| WezTerm              | ✅        |                                                         |
+| Ghostty              | ✅        |                                                         |
+| tmux                 | ✅        | Requires `allow-passthrough on` in tmux config          |
+| Warp                 | ✅        |                                                         |
+| wayst                | ✅        |                                                         |
+| st                   | ✅        | Requires `st-kitty-graphics` [patch][st-patch]          |
+| Zellij               | ❌         |                                                         |
+| Alacritty            | ❌         |                                                         |
+| Terminal.app (macOS) | ❌         |                                                         |
 
 ## Installation
 
@@ -47,3 +47,6 @@ matplotlib.use("kitcat")
 ## Acknowledgements
 
 I discovered [matplotlib-backend-kitty](https://github.com/jktr/matplotlib-backend-kitty) repository, which provides similar functionality in Kitty. I aimed to create a simpler solution that works across any terminal supporting the protocol.
+
+
+[st-patch]: https://st.suckless.org/patches/kitty-graphics-protocol/
