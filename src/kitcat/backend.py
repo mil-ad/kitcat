@@ -186,7 +186,7 @@ def _transmit_image_via_passthrough(data, image_id, rows, cols):
     while more_data:
         chunk, more_data = more_data[:CHUNK_SIZE_KITTY], more_data[CHUNK_SIZE_KITTY:]
         m = "1" if more_data else "0"
-        _wrap_passthrough(f"\033\033_Gm={m},i={image_id};{chunk}\033\033\\")
+        _wrap_passthrough(f"\033\033_Gm={m},q=2,i={image_id};{chunk}\033\033\\")
 
 
 def _output_placeholders(image_id, rows, cols):
