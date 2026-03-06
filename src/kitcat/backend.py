@@ -169,24 +169,21 @@ def _next_image_id():
     return _image_id_counter
 
 
-def _wrap_passthrough(payload):
-    """Wrap a single kitty graphics command in a tmux DCS passthrough."""
-    sys.stdout.write(f"\033Ptmux;{payload}\033\\")
-
-
 def _transmit_image_via_passthrough(data, image_id, rows, cols):
     """Transmit image data to the terminal via tmux passthrough."""
     first_chunk, more_data = data[:CHUNK_SIZE_KITTY], data[CHUNK_SIZE_KITTY:]
 
+    sys.stdout.write("\033Ptmux;")
     m = "1" if more_data else "0"
-    _wrap_passthrough(
+    sys.stdout.write(
         f"\033\033_Gm={m},a=T,U=1,q=2,i={image_id},f=100,c={cols},r={rows}"
         f";{first_chunk}\033\033\\"
     )
     while more_data:
         chunk, more_data = more_data[:CHUNK_SIZE_KITTY], more_data[CHUNK_SIZE_KITTY:]
         m = "1" if more_data else "0"
-        _wrap_passthrough(f"\033\033_Gm={m},q=2,i={image_id};{chunk}\033\033\\")
+        sys.stdout.write(f"\033\033_Gm={m},q=2,i={image_id};{chunk}\033\033\\")
+    sys.stdout.write("\033\\")
 
 
 def _output_placeholders(image_id, rows, cols):
