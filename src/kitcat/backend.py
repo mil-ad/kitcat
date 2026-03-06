@@ -221,6 +221,8 @@ def _is_tmux():
     """Detect if running inside tmux, including over SSH where TMUX isn't set."""
     if "TMUX" in os.environ:
         return True
+    if os.environ.get("KITCAT_TMUX") == "1":
+        return True
     term = os.environ.get("TERM", "")
     return term.startswith("tmux") or term.startswith("screen")
 
