@@ -217,6 +217,14 @@ def display_kitty_unicode_placeholder(img_buf):
     sys.stdout.flush()
 
 
+def _is_tmux():
+    """Detect if running inside tmux, including over SSH where TMUX isn't set."""
+    if "TMUX" in os.environ:
+        return True
+    term = os.environ.get("TERM", "")
+    return term.startswith("tmux") or term.startswith("screen")
+
+
 class KitcatFigureManager(FigureManagerBase):
     def show(self):
         with BytesIO() as buf:
@@ -225,7 +233,7 @@ class KitcatFigureManager(FigureManagerBase):
 
             if os.environ.get("TERM_PROGRAM") in ["iTerm.app", "vscode"]:
                 display_iterm2(img_buf=buf)
-            elif "TMUX" in os.environ:
+            elif _is_tmux():
                 display_kitty_unicode_placeholder(img_buf=buf)
             else:
                 display_kitty(img_buf=buf)
