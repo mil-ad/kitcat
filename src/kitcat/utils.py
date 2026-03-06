@@ -17,9 +17,24 @@ def get_char_cell_height() -> int:
     return int(screen_height // num_rows)
 
 
+def get_char_cell_width() -> int:
+    buf = array.array("H", [0, 0, 0, 0])
+    fcntl.ioctl(sys.stdout, termios.TIOCGWINSZ, buf)
+    _, num_cols, screen_width, _ = buf
+    return int(screen_width // num_cols)
+
+
 def num_required_lines(img_buf):
     with Image.open(img_buf) as img:
         _, img_height = img.size
         img_buf.seek(0)
 
     return math.ceil(img_height / get_char_cell_height())
+
+
+def num_required_cols(img_buf):
+    with Image.open(img_buf) as img:
+        img_width, _ = img.size
+        img_buf.seek(0)
+
+    return math.ceil(img_width / get_char_cell_width())
