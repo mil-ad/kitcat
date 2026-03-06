@@ -14,6 +14,8 @@ def get_char_cell_height() -> int:
     fcntl.ioctl(sys.stdout, termios.TIOCGWINSZ, buf)
     num_rows, _, _, screen_height = buf
 
+    if num_rows == 0 or screen_height == 0:
+        return 16  # fallback when pixel dimensions unavailable (e.g. SSH)
     return int(screen_height // num_rows)
 
 
@@ -21,6 +23,8 @@ def get_char_cell_width() -> int:
     buf = array.array("H", [0, 0, 0, 0])
     fcntl.ioctl(sys.stdout, termios.TIOCGWINSZ, buf)
     _, num_cols, screen_width, _ = buf
+    if num_cols == 0 or screen_width == 0:
+        return 8  # fallback when pixel dimensions unavailable (e.g. SSH)
     return int(screen_width // num_cols)
 
 
