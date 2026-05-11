@@ -5,12 +5,13 @@ from base64 import b64encode
 from functools import wraps
 from io import BytesIO
 
+from matplotlib import _pylab_helpers
 from matplotlib.backend_bases import FigureManagerBase
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 from .utils import num_required_lines
 
-__all__ = ["FigureCanvas", "FigureManager"]
+__all__ = ["FigureCanvas", "FigureManager", "show"]
 
 CHUNK_SIZE_KITTY = 4096
 CHUNK_SIZE_IT2 = 1_048_576
@@ -115,3 +116,23 @@ class KitcatFigureCanvas(FigureCanvasAgg):
 # provide the standard names that matplotlib is expecting
 FigureCanvas = KitcatFigureCanvas
 FigureManager = KitcatFigureManager
+
+
+def show(*, block=None):
+    '''
+    Show all open figures and then close them.
+
+    This matches the behavior of IPython's inline backend, where figures
+    are closed after being displayed to prevent accumulating stale figures
+    from previous plot() calls.
+
+    Parameters
+    ----------
+    block : bool, optional
+        This parameter is ignored for this non-GUI backend.
+    '''
+    managers = _pylab_helpers.Gcf.get_all_fig_managers()
+    for manager in managers:
+        manager.show()
+    if managers:
+        _pylab_helpers.Gcf.destroy_all()
