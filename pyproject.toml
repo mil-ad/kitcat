@@ -1,6 +1,6 @@
 [project]
 name = "kitcat"
-version = "1.2.1"
+version = "1.3.0"
 description = "Matplotlib backend for direct plotting in the terminal using Kitty graphics protocol."
 readme = "README.md"
 requires-python = ">=3.9"
