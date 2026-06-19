@@ -3,7 +3,7 @@
 This project introduces a new `kitcat` backend for Matplotlib that allows plots to be displayed directly in the terminal. It utilizes the "agg" backend for rendering plots before sending them to the terminal.
 
 - Direct Matplotlib plotting in terminal emulators that support [Kitty](https://sw.kovidgoyal.net/kitty/graphics-protocol/) or [iTerm2](https://iterm2.com/documentation-images.html) graphics protocols.
-- Works seamlessly over SSH.
+- Works seamlessly over SSH and inside tmux.
 
 <p float="left">
   <img src="https://raw.githubusercontent.com/mil-ad/kitcat/main/demo1.gif" width="45%" />
@@ -21,13 +21,19 @@ Not all terminal emulators support Kitty or iTerm2 graphics protocols. I haven't
 | VSCode               | ✅        | Requires `terminal.integrated.enableImages` in settings |
 | WezTerm              | ✅        |                                                         |
 | Ghostty              | ✅        |                                                         |
-| tmux                 | ✅        | Requires `allow-passthrough on` in tmux config          |
+| tmux                 | ✅        | Requires `allow-passthrough on` in tmux config. See [tmux notes](#tmux-notes). |
 | Warp                 | ✅        |                                                         |
 | wayst                | ✅        |                                                         |
 | st                   | ✅        | Requires `st-kitty-graphics` [patch][st-patch]          |
 | Zellij               | ❌         |                                                         |
 | Alacritty            | ❌         |                                                         |
 | Terminal.app (macOS) | ❌         |                                                         |
+
+### tmux notes
+
+On **Kitty** and **Ghostty**, kitcat uses [Unicode placeholders][placeholders] so the image becomes part of tmux's text buffer — it scrolls with the buffer, clips at the pane boundary, and disappears when the pane is hidden. On other terminals, the image is drawn directly by the outer emulator and stays at a fixed screen position (so it can persist when switching panes — this is a tmux/terminal limitation, not a kitcat one).
+
+Either way, `set -g allow-passthrough on` is required in your tmux config.
 
 ## Installation
 
@@ -50,3 +56,4 @@ I discovered [matplotlib-backend-kitty](https://github.com/jktr/matplotlib-backe
 
 
 [st-patch]: https://st.suckless.org/patches/kitty-graphics-protocol/
+[placeholders]: https://sw.kovidgoyal.net/kitty/graphics-protocol/#unicode-placeholders
