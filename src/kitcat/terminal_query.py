@@ -56,7 +56,29 @@ def query_terminal(sequence: str, timeout: float = 0.3) -> str:
     return buf.decode("ascii", errors="replace")
 
 
-def _normalise(name: str) -> str | None:
+def _query_xtgettcap(cap: str) -> str | None:
+    """Query a single XTGETTCAP capability and return its decoded value.
+
+    Sends ``DCS + q <hex-name> ST`` and parses the
+    ``DCS 1 + r <hex-name> = <hex-value> ST`` reply (a ``DCS 0 + r`` reply
+    means the capability is unknown). Handles both terminfo names like ``TN``
+    and kitty's ``kitty-query-*`` extension fields. Returns None if the
+    terminal doesn't report the capability.
+    """
+    name_hex = cap.encode("ascii").hex()
+    response = query_terminal(f"\033P+q{name_hex}\033\\")
+    match = re.search(
+        rf"\033P1\+r{name_hex}=([0-9a-fA-F]+)\033\\", response, re.IGNORECASE
+    )
+    if not match:
+        return None
+    try:
+        return bytes.fromhex(match.group(1)).decode("ascii", errors="replace")
+    except ValueError:
+        return None
+
+
+def _normalise(name: str | None) -> str | None:
     """Normalize a terminal name to a lowercase, version-free token.
 
     Different detection methods (and different terminals) report the same
@@ -95,17 +117,8 @@ def _normalise(name: str) -> str | None:
 
 
 def _detect_via_xtgettcap() -> str | None:
-    """Ask the terminal for its terminfo TN capability."""
-    response = query_terminal("\033P+q544e\033\\")
-    # Response: ESC P 1 + r 544e = <hex-encoded value> ESC \
-    match = re.search(r"\033P1\+r544e=([0-9a-fA-F]+)\033\\", response)
-    if not match:
-        return None
-    try:
-        raw = bytes.fromhex(match.group(1)).decode("ascii", errors="replace")
-    except ValueError:
-        return None
-    return _normalise(raw)
+    """Ask the terminal for its terminfo TN (terminal name) capability."""
+    return _normalise(_query_xtgettcap("TN"))
 
 
 def _detect_via_xtversion() -> str | None:
@@ -180,7 +193,26 @@ def detect_terminal() -> str | None:
     return None
 
 
-def diagnostic() -> dict[str, str | None]:
+def get_terminal_dpi() -> float | None:
+    """The terminal's physical DPI, or None if it doesn't report one.
+
+    Only kitty implements the ``kitty-query-dpi_x`` field. Ghostty speaks the
+    kitty graphics protocol but not this XTGETTCAP extension (yet), so it —
+    like every other terminal — is gated out and returns None, which callers
+    treat as "no DPI scaling".
+    """
+    if detect_terminal() != "kitty":
+        return None
+    value = _query_xtgettcap("kitty-query-dpi_x")
+    if value is None:
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        return None
+
+
+def diagnostic() -> dict[str, str | float | None]:
     """Run every detection strategy plus the orchestrator and return all
     results. Useful for debugging terminal-identification issues."""
     strategies = (
@@ -192,6 +224,7 @@ def diagnostic() -> dict[str, str | None]:
     return {
         **{s.__name__: s() for s in strategies},
         "detect_terminal": detect_terminal(),
+        "get_terminal_dpi": get_terminal_dpi(),
     }
 
 
