@@ -1,6 +1,5 @@
 import sys
 from contextlib import contextmanager
-from functools import lru_cache
 from io import BytesIO
 
 from matplotlib import _pylab_helpers
@@ -8,35 +7,9 @@ from matplotlib.backend_bases import FigureManagerBase
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 from kitcat.protocols import iterm, kitty_basic, kitty_unicode_placeholder
-from kitcat.terminal_query import detect_terminal, get_terminal_dpi
+from kitcat.terminal_query import detect_terminal, get_dpi_scale
 
 __all__ = ["FigureCanvas", "FigureManager", "show"]
-
-
-@lru_cache(maxsize=1)
-def get_dpi_scale() -> float:
-    """Factor to multiply a figure's render DPI by for the current terminal.
-
-    Equals the terminal's device-pixel ratio. The placeholder grid is sized from
-    the rendered image's pixel count, so on a HiDPI display a default-DPI figure
-    occupies too few cells and renders half-size and soft; scaling the render
-    DPI up keeps plots a consistent physical size and crisp.
-
-    Returns 1.0 (no scaling) whenever the terminal reports no DPI — anything but
-    kitty, or a failed query — so callers can apply it unconditionally.
-
-    Cached: it costs a terminal round-trip and the display density doesn't
-    change underneath us in practice.
-    """
-
-    REFERENCE_DPI = 96.0
-    MIN_DPI_SCALE = 1.0
-    MAX_DPI_SCALE = 3.0
-
-    dpi = get_terminal_dpi()
-    if dpi is None:
-        return 1.0
-    return max(MIN_DPI_SCALE, min(MAX_DPI_SCALE, dpi / REFERENCE_DPI))
 
 
 @contextmanager

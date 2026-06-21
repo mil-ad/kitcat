@@ -1,6 +1,6 @@
 [project]
 name = "kitcat"
-version = "2.0.0"
+version = "2.0.1"
 description = "Matplotlib backend for direct plotting in the terminal."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -23,10 +23,15 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "pandas>=2.3.3",
     "pre-commit>=4.0.1",
     "prek>=0.4.5",
+    "pytest>=8.0",
     "ruff>=0.8.4",
 ]
 
 [project.entry-points."matplotlib.backend"]
 kitcat = "kitcat.backend"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

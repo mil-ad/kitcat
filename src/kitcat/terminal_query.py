@@ -212,6 +212,28 @@ def get_terminal_dpi() -> float | None:
         return None
 
 
+@lru_cache(maxsize=1)
+def get_dpi_scale() -> float:
+    """Factor by which the figure's render DPI (and, in tmux, the assumed cell
+    size) is multiplied for the current terminal.
+
+    Equals the terminal's device-pixel ratio. Returns 1.0 (no scaling) whenever
+    the terminal reports no DPI — anything but kitty, or a failed query — so
+    callers can apply it unconditionally.
+
+    Cached: it costs a terminal round-trip and the display density doesn't
+    change underneath us in practice.
+    """
+    REFERENCE_DPI = 96.0
+    MIN_DPI_SCALE = 1.0
+    MAX_DPI_SCALE = 3.0
+
+    dpi = get_terminal_dpi()
+    if dpi is None:
+        return 1.0
+    return max(MIN_DPI_SCALE, min(MAX_DPI_SCALE, dpi / REFERENCE_DPI))
+
+
 def diagnostic() -> dict[str, str | float | None]:
     """Run every detection strategy plus the orchestrator and return all
     results. Useful for debugging terminal-identification issues."""
@@ -225,6 +247,7 @@ def diagnostic() -> dict[str, str | float | None]:
         **{s.__name__: s() for s in strategies},
         "detect_terminal": detect_terminal(),
         "get_terminal_dpi": get_terminal_dpi(),
+        "get_dpi_scale": get_dpi_scale(),
     }
 
 

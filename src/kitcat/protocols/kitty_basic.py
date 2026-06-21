@@ -9,7 +9,7 @@ Escape codes are of the form ``<ESC>_G<control data>;<payload><ESC>\\``.
 
 from base64 import b64encode
 
-from kitcat.utils import num_required_lines, reserve_image_rows, send_sequence
+from kitcat.utils import num_required_lines, reserve_image_rows, send_sequences
 
 CHUNK_SIZE = 4096
 
@@ -19,10 +19,12 @@ def display(img_buf) -> None:
     img_buf.seek(0)
 
     with reserve_image_rows(num_required_lines(img_buf)):
-        send_sequence(_build_escapes(data))
+        # Each chunk goes in its own tmux passthrough envelope (see
+        # send_sequences); a single envelope around many chunks fails to render.
+        send_sequences(_build_escapes(data))
 
 
-def _build_escapes(data: str) -> str:
+def _build_escapes(data: str) -> list[str]:
     """Chunk base64 PNG data into a sequence of kitty graphics escapes.
 
     a=T: transmit and display, f=100: PNG payload, m=1: more chunks follow.
@@ -32,4 +34,4 @@ def _build_escapes(data: str) -> str:
     while more:
         chunk, more = more[:CHUNK_SIZE], more[CHUNK_SIZE:]
         out.append(f"\033_Gm={'1' if more else '0'};{chunk}\033\\")
-    return "".join(out)
+    return out

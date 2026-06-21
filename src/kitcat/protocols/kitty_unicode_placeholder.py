@@ -11,7 +11,7 @@ Reference: https://sw.kovidgoyal.net/kitty/graphics-protocol/#unicode-placeholde
 import sys
 from base64 import b64encode
 
-from kitcat.utils import num_required_cols, num_required_lines, send_sequence
+from kitcat.utils import num_required_cols, num_required_lines, send_sequences
 
 CHUNK_SIZE = 4096
 PLACEHOLDER = "\U0010eeee"
@@ -366,8 +366,13 @@ def _transmit(data: str, image_id: int, rows: int, cols: int) -> None:
                 f"{chunk}\033\\"
             )
         else:
-            parts.append(f"\033_Gq=2,i={image_id},m={more};{chunk}\033\\")
-    send_sequence("".join(parts))
+            # Continuation chunks may carry ONLY the m (and optionally q) keys —
+            # repeating i=/f=/etc. is a protocol violation that strict terminals
+            # (kitty) reject, dropping the whole image, while lenient ones
+            # (Ghostty) tolerate it.
+            parts.append(f"\033_Gq=2,m={more};{chunk}\033\\")
+    # Each chunk goes in its own tmux passthrough envelope — see send_sequences.
+    send_sequences(parts)
 
 
 def _emit_placeholders(image_id: int, rows: int, cols: int) -> None:
