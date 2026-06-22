@@ -8,6 +8,7 @@ content as the buffer scrolls.
 Reference: https://sw.kovidgoyal.net/kitty/graphics-protocol/#unicode-placeholders
 """
 
+import random
 import sys
 from base64 import b64encode
 
@@ -318,7 +319,11 @@ _DIACRITICS = [
     0x1D244,
 ]
 
-_image_id = 0
+# Image IDs share one namespace across the terminal, and through tmux every
+# pane is the same client — so a counter starting at 1 collides across panes
+# (pane B's image overwrites pane A's, whose placeholders then show B's plot).
+# Seed from a random 24-bit base so processes land in different id regions.
+_image_id = random.randrange(0x1000000)
 
 
 def _next_image_id() -> int:
